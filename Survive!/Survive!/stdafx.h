@@ -21,5 +21,6 @@
 
 // TODO: reference additional headers your program requires here
 #include <Windows.h>
+#include <ObjIdl.h>
 #include <gdiplus.h>
 using namespace Gdiplus;

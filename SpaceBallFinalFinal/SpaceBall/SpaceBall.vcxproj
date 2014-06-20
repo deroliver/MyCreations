@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{9DD4B2F5-2B60-4503-9FE3-F91B74E45434}</ProjectGuid>
+    <ProjectGuid>{DAD347DF-4E67-42E9-91A1-A9287FBA6571}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Survive</RootNamespace>
+    <RootNamespace>SpaceBall</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -55,7 +55,6 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -78,33 +77,26 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Board.h" />
-    <ClInclude Include="House.h" />
+    <ClInclude Include="GameMgr.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SpaceBall.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Survive!.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="User.h" />
-    <ClInclude Include="Zombies.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Board.cpp" />
-    <ClCompile Include="House.cpp" />
+    <ClCompile Include="GameMgr.cpp" />
+    <ClCompile Include="SpaceBall.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Survive!.cpp" />
-    <ClCompile Include="User.cpp" />
-    <ClCompile Include="Zombies.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Survive!.rc" />
+    <ResourceCompile Include="SpaceBall.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="bitmap2.bmp" />
     <Image Include="small.ico" />
-    <Image Include="Survive!.ico" />
+    <Image Include="SpaceBall.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

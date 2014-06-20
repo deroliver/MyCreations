@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "Survive!.h"
 #include "House.h"
+#include "User.h"
 
 #define MAX_LOADSTRING 100
 
@@ -130,8 +131,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	int wmId, wmEvent;
 	PAINTSTRUCT ps;
-	HDC hdc;
+	HDC hdc, memDC;
 	House H1;
+	Zombie Z1(175, 375);
+	User U1;
+	HBITMAP bmpHouse;
 
 	switch (message)
 	{
@@ -153,10 +157,43 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
-		H1.drawHouse(hWnd, hdc);
-		H1.drawHouseBoards(hWnd, hdc);
+		bmpHouse = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_BITMAP2));
+		memDC = CreateCompatibleDC(hdc);
+		SelectObject(memDC, bmpHouse);
+		BitBlt(hdc, 0, 0, 1000, 1000, memDC, 0, 0, SRCCOPY);
+		
+		//SelectObject(hdc, bmp);
+		
+		//H1.drawHouse(hWnd, hdc);
+		//H1.drawHouseBoards(hWnd, hdc);
+		//Z1.drawZombieInWindow(hWnd, hdc);
+		U1.drawUser(hWnd, hdc);
+	//	BitBlt(hdc, 0, 0, 1200, 1200, memDc, 0, 0, SRCCOPY);
+		
+		DeleteDC(memDC);
+		DeleteObject(bmpHouse);
 		EndPaint(hWnd, &ps);
 		break;
+	case WM_TIMER:
+		InvalidateRect(hWnd, NULL, false);
+		break;
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case VK_LEFT:
+			U1.moveUserLeft();
+			break;
+
+		case VK_RIGHT:
+			U1.moveUserRight();
+			break;
+		case 'A':
+			U1.shootGun();
+		}
+		InvalidateRect(hWnd, NULL, TRUE);
+		UpdateWindow(hWnd);
+		return 0;
+
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;

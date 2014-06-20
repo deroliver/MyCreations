@@ -4,56 +4,59 @@ using namespace std;
 
 
 House::House(){
-	window1b = 3;
-	window2b = 3;
-	window3b = 3;
-	window4b = 3;
+	left = 100;
+	right = 1075;
+	firFloor = 685;
+	secFloor = 485;
+
 }
 
 void House::drawHouse(HWND hwnd, HDC hdc) const{
-	GdiplusStartupInput gdiplusStartupInput;
+	GdiplusStartupInput gdiplusStartupInput;//GDIPlus starup code
 	ULONG_PTR gdiplusToken;
 	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 	
-	RoundRect(hdc, 85, 225, 1090, 840, 3, 3);
-	Rectangle(hdc, 100, 250, 1075, 830);
+	Pen hPen(Color(232, 70, 20, 1), 5);
+	SolidBrush hBrush(Color(232, 70, 20, 1));
+	SolidBrush inWBrush(Color(255, 150, 85, 45));
 	
-	MoveToEx(hdc, 85, 225, NULL);
-	LineTo(hdc, 588, 50);
+	Graphics House(hdc);
 
-	MoveToEx(hdc, 1090, 225, NULL);
-	LineTo(hdc, 588, 50);
+	//House.DrawRectangle(&hPen, 100, 175, 975, 510);//Draw the inner Wall
+	//House.DrawRectangle(&hPen, 85, 150, 1005, 550);//Draw the Outer Wall
 
-	MoveToEx(hdc, 100, 565, NULL);
-	LineTo(hdc, 538, 565);
+	MoveToEx(hdc, 100, 175, NULL);
+	LineTo(hdc, 1075, 175);
+	
+	House.FillRectangle(&inWBrush, 88, 153, 1000, 20);//Fills the space between the inner and outer wall with color
+	House.FillRectangle(&inWBrush, 88, 173, 10, 525);//Fills the space between the inner and outer wall with color
+	House.FillRectangle(&inWBrush, 98, 688, 990, 10);//Fills the space between the inner and outer wall with color
+	House.FillRectangle(&inWBrush, 1078, 173, 10, 515);//Fills the space between the inner and outer wall with color
 
-	MoveToEx(hdc, 638, 565, NULL);
-	LineTo(hdc, 1075, 565);
+	House.FillRectangle(&inWBrush, 103, 178, 970, 136);
 
-	RoundRect(hdc, 150, 360, 250, 475, 2, 2);
-	RoundRect(hdc, 150, 650, 250, 765, 2, 2);
-	RoundRect(hdc, 925, 650, 1025, 765, 2, 2);
-	RoundRect(hdc, 925, 360, 1025, 475, 2, 2);
+	House.FillRectangle(&hBrush, 102, 485, 438, 10);//Draws the second floor
+	House.FillRectangle(&hBrush, 638, 485, 438, 10);//Draws the second floor
+	
+//	MoveToEx(hdc, 85, 147, NULL);//Draws the top of the house
+	//LineTo(hdc, 588, 25);
+
+	//MoveToEx(hdc, 1090, 147, NULL);//Draws the top of the house
+	LineTo(hdc, 588, 25);
+
+	House.DrawRectangle(&hPen, 150, 315, 100, 115);//Draws the Windows
+	House.DrawRectangle(&hPen, 150, 525, 100, 115);//Draws the Windows
+	House.DrawRectangle(&hPen, 925, 315, 100, 115);//Draws the Windows
+	House.DrawRectangle(&hPen, 925, 525, 100, 115);//Draws the Windows
 }
 
 void House::drawHouseBoards(HWND hwnd, HDC hdc) const{
-	switch (this->window1b){
-	case 3:
-		drawWindow1Boards3(hwnd, hdc);
-	}
+	
+	
+}
 	 
 
 
-}
+//}
 
 
-void drawWindow1Boards3(HWND hwnd, HDC hdc){
-
-	Graphics R1(hdc);
-	SolidBrush pen(Color(77, 53, 12, 2));
-	R1.FillRectangle(&pen, 165, 350, 20, 135);
-	
-	
-	//RoundRect(hdc, 165, 350, 185, 485, 2, 2);
-	RoundRect(hdc, 135, 440, 265, 460, 2, 2);
-}
