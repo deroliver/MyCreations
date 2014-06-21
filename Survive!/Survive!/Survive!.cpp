@@ -5,6 +5,8 @@
 #include "Survive!.h"
 #include "House.h"
 #include "User.h"
+#include "Figure.h"
+#include <ctime>
 
 #define MAX_LOADSTRING 100
 
@@ -24,6 +26,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPTSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
+	srand(time(NULL));
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
@@ -132,10 +135,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	int wmId, wmEvent;
 	PAINTSTRUCT ps;
 	HDC hdc, memDC;
-	House H1;
-	Zombie Z1(175, 375);
-	User U1;
 	HBITMAP bmpHouse;
+	House H1;
+	User U1;
+	Zombie Z1;
+	H1.addZombieToHouse();
+	H1.addZombieToHouse();
 
 	switch (message)
 	{
@@ -161,14 +166,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		memDC = CreateCompatibleDC(hdc);
 		SelectObject(memDC, bmpHouse);
 		BitBlt(hdc, 0, 0, 1000, 1000, memDC, 0, 0, SRCCOPY);
-		
-		//SelectObject(hdc, bmp);
-		
-		//H1.drawHouse(hWnd, hdc);
-		//H1.drawHouseBoards(hWnd, hdc);
-		//Z1.drawZombieInWindow(hWnd, hdc);
-		U1.drawUser(hWnd, hdc);
-	//	BitBlt(hdc, 0, 0, 1200, 1200, memDc, 0, 0, SRCCOPY);
+		H1.drawZombiesInHouse(hWnd, hdc);
+		U1.drawFigure(hWnd, hdc);
 		
 		DeleteDC(memDC);
 		DeleteObject(bmpHouse);
@@ -181,14 +180,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		switch (wParam)
 		{
 		case VK_LEFT:
-			U1.moveUserLeft();
+			U1.moveFigureLeft();
 			break;
 
 		case VK_RIGHT:
-			U1.moveUserRight();
+			U1.moveFigureRight();
 			break;
-		case 'A':
-			U1.shootGun();
+		//case 'A':
+		//	U1.shootGun();
 		}
 		InvalidateRect(hWnd, NULL, TRUE);
 		UpdateWindow(hWnd);

@@ -3,24 +3,19 @@
 
 #include "stdafx.h"
 #include <CommDlg.h>
-#include "Zombies.h"
-#include "Board.h"
+#include "Zombie.h"
 #include <vector>
 using namespace std;
 
 
 class House{
-private:
-	vector<Zombie> zombies;
-	vector<Board> window1;
-	vector<Board> window2;
-	vector<Board> window3;
-	vector<Board> window4;
-	int left, right, secFloor, firFloor;
 public:
+	vector<Zombie*> zombies;
 	House();
-	void drawHouse(HWND hwnd, HDC hdc) const;
-	void drawHouseBoards(HWND hwnd, HDC hdc) const;
+	void drawZombiesInHouse(HWND hwnd, HDC hdc);
+	void addZombieToHouse();
+	void drawZombiesInWindow(HWND hwnd, HDC hdc);
+	bool operator+(Zombie*&);
 };
 
 
