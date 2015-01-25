@@ -30,7 +30,7 @@ public class KeyHandler implements MouseMotionListener, MouseListener {
 
     
     public void mousePressed(MouseEvent e) {
-        
+        Screen.store.Click(e.getButton());
     }
 
     
