@@ -13,13 +13,13 @@ import java.awt.*;
 public class Block extends Rectangle {
 	public Rectangle towerRange;
 	
-	public int towerRangeSize = 190;// The range of the towers
+	public int towerRangeSize = 200;// The range of the towers
     public int trackID; // The ID for the track
     public int fieldID; // The ID for the field
     public int shotEnemy = -1; // The ID of the enemy the tower is shooting at
     
     public int healthFrame = 0; // Keeps track of negating health from the enemy
-    public static int healthTime = 230;
+    public static int healthTime = 210;
     
     public boolean isShooting = false; // Is the tower shooting?
     
@@ -46,7 +46,6 @@ public class Block extends Rectangle {
     public void draw(Graphics g) {
         if(trackID == Values.groundTrack) // If the trackID is equal to the values for a track piece
     		g.drawImage(Screen.track, x, y, width, height, null);
-        //g.drawRect(x, y, width, height);
         g.drawImage(Screen.tileset_towers[fieldID], x, y, width, height, null);                         
     }
     

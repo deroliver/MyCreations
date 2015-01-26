@@ -110,7 +110,7 @@ public class Enemy extends Rectangle {
 	// Variable to kee track of the animation speed as well as the move speed
 	public int animateFrame = 0, animationSpeed = 300;
 	public int moveFrame = 0;
-	public static int moveSpeed = 18;
+	public static int moveSpeed = 20;
 	
 	/**
 	 * The function that moves the enemy 

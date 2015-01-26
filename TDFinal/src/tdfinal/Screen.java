@@ -36,7 +36,7 @@ public class Screen extends JPanel implements Runnable { // All drawing is done 
     
     public static int myWidth, myHeight; // Width and Height of the JPanel
     public static int money = 200; // Starting money	
-    public static int health = 1; // Starting Health
+    public static int health = 20; // Starting Health
     public static int killed = 0, killsToWin = 0;
     public static int highScore = -1;
     
@@ -172,15 +172,19 @@ public class Screen extends JPanel implements Runnable { // All drawing is done 
     	else
     		createFrame += 1;
     	
-    	if(killCount == 10){
+    	if(killCount == 10){ // Every ten enemies
     		killCount = 0;
-    		if(createTime > 800)
-    			createTime -= 250;
+    		if(createTime > 700)
+    			createTime -= 275; // Increase spawn rate
     		
-    		if(Enemy.moveSpeed > 10)	
-    				Enemy.moveSpeed -= 2;
-
-        	Block.healthTime += 15;
+    		if(Enemy.moveSpeed > 8)	
+    				Enemy.moveSpeed -= 2; // Increase enemy movement speed
+    		if(killed > 100)
+    			Block.healthTime += 25; // Increase enemy health
+    		else if(killed > 200)
+    			Block.healthTime += 30;
+    		else
+    			Block.healthTime += 20;
     	}
     }
     
@@ -197,36 +201,36 @@ public class Screen extends JPanel implements Runnable { // All drawing is done 
     
     
     /**
-     * Implementation of the run function for this classes thread
+     * Code for the thread - Overrides run method of Runnable
      */
     public void run() { 
         while(true) {
-            if(!isFirst && health > 0 && state == STATE.GAME) { // If its not the first time running and the user has health
-            	manager.physic();
+            if(!isFirst && health > 0 && state == STATE.GAME) {
+            	manager.physic(); // Calculates the targeting and shooting of towers
             	enemyCreator(); // Creates enemies
             	for(int i= 0; i < enemies.length; i++) {
             		if(enemies[i].isAlive) {
-            			enemies[i].move(); // Moves the enemies
+            			enemies[i].move(); // Moves the enemies if alive
             		}
             	}
             }
-            else if(health < 1) {
+            else if(health < 1) { // If the user lost
             	for(int i = 0; i < enemies.length; i++)
             		enemies[i].deleteEnemy(); // Deletes all enemies on the screen
             	
             	if(isFirstAfterLoss){
             		CheckScore();// Checks if there is a high score
             		isFirstAfterLoss = false;
-             		save.writeHighScore();
+             		save.writeHighScore(); // Writes high score info to text file
             	}
             	state = STATE.POSTGAME; // Sets the state to postgame            	
             }
             	
             
-           repaint();// Repaint the screen
+           repaint();// Calls the paint method
                         
            try {
-                Thread.sleep(1);// Causes the thread to pause for 1 millisecond in order to slow down movement
+                Thread.sleep(1);// Delay
            } 
            catch (Exception ex) {
                System.out.println(ex.getMessage());
