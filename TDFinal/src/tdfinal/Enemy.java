@@ -2,6 +2,11 @@ package tdfinal;
 
 import java.awt.*;
 
+/**
+ * The class that defines the enemies
+ * @author Derik
+ *
+ */
 public class Enemy extends Rectangle {
 	public int xCoord, yCoord;
 	public int eWalk;
@@ -22,11 +27,10 @@ public class Enemy extends Rectangle {
 	
 	public Image image;
 	
-
-	public Enemy() {
-		
-	}
-	
+	/**
+	 * Creates an enemy at the position of the first block with a TrackID corresponding to the ID of a track piece
+	 * @param ID
+	 */
 	public void Create(int ID) {
 		// Spawns the enemy at the location of the first piece of track across the top of the map layout
 		for(int i = 0; i < Screen.manager.world.length; i++) {
@@ -43,7 +47,9 @@ public class Enemy extends Rectangle {
 		image = Screen.tileset_soldier[0];
 	}
 	
-	// Animate the enemy walking   
+	/**
+	 * Animates the enemy walking
+	 */
     public void Animate() {
     	if(dir == down)	{
     		if(one) {
@@ -88,7 +94,9 @@ public class Enemy extends Rectangle {
 		}
     }
 	
-	// The enemy is not alive anymore
+	/**
+	 * Removes the ennym from the screen
+	 */
 	public void deleteEnemy() {
 		dir = down;
 		isAlive = false;
@@ -99,11 +107,14 @@ public class Enemy extends Rectangle {
 	}
 	
 
-	
+	// Variable to kee track of the animation speed as well as the move speed
 	public int animateFrame = 0, animationSpeed = 300;
 	public int moveFrame = 0;
-	public static int moveSpeed = 20;
+	public static int moveSpeed = 18;
 	
+	/**
+	 * The function that moves the enemy 
+	 */
 	public void move() {		
 		if(animateFrame >= animationSpeed) {
 			Animate();
@@ -132,6 +143,7 @@ public class Enemy extends Rectangle {
 			}
 			
 			eWalk += 1;
+			
 			// Keeps track of coordinates relative to the map's layout
 			if(eWalk == Screen.manager.blockSize) { // If the enemy has gone the distance of a block 
 				if(dir == down)	 // Increment the coordinate values 
@@ -143,10 +155,9 @@ public class Enemy extends Rectangle {
 				else if(dir == left)
 					xCoord -= 1;
 				
-				// Changing Direction - Follows the path which is determined by the trackID
-				
-				
+			// Changing Direction - Follows the path which is determined by the trackID	
 			if(!hasRight){ // If the enemy is not already moving right
+					// Checks if there is a track piece to the right
 				if(Screen.manager.world[yCoord][xCoord - 1].trackID == Values.groundTrack){
 					dir = left;
 						image = Screen.tileset_soldier[4];
@@ -154,6 +165,7 @@ public class Enemy extends Rectangle {
 			}				
 					
 			if(!hasDown){  // If the enemy is not already moving down					
+				// Checks if there is a track piece downwards
 				if(Screen.manager.world[yCoord - 1][xCoord].trackID == Values.groundTrack){
 					dir = up;
 					image = Screen.tileset_soldier[6];
@@ -161,6 +173,7 @@ public class Enemy extends Rectangle {
 			}
 					
 			if(!hasUp){	  // If the enemy is not already moving up				
+				// Checks if there is a track piece upwards
 				if(Screen.manager.world[yCoord + 1][xCoord].trackID == Values.groundTrack){
 					dir = down;
 					image = Screen.tileset_soldier[0];
@@ -168,6 +181,7 @@ public class Enemy extends Rectangle {
 			}
 					
 			if(!hasLeft){ // If the enemy is not already moving left				
+				// Checks if there is a track piece to the left
 				if(Screen.manager.world[yCoord][xCoord + 1].trackID == Values.groundTrack){					
 					dir = right;
 					image = Screen.tileset_soldier[2];
@@ -180,7 +194,7 @@ public class Enemy extends Rectangle {
 			}
 			}
 					
-				// Reset all direction flags as well as the int to track the enemies coordinates
+				// Reset all direction flags as well as the integer used to track the enemies coordinates
 				hasUp = false;
 				hasDown = false;
 				hasRight = false;
@@ -193,12 +207,18 @@ public class Enemy extends Rectangle {
 			moveFrame += 1;						
 	}
 	
-	
+	/**
+	 * When the enemy loses health
+	 * @param rate The rate the health should be subtracted
+	 */
 	public void loseHealth(int rate){
 		health -= rate;
 			checkDeath();		
 	}
 	
+	/**
+	 * Checks if the enemy is dead
+	 */
 	public void checkDeath(){
 		if(health < 1) {
 			deleteEnemy();
@@ -207,6 +227,10 @@ public class Enemy extends Rectangle {
 		}
 	}
 	
+	/**
+	 * Returns if the enemy is dead or not
+	 * @return If the enemy is dead or not
+	 */
 	public boolean isDead(){
 		if(isAlive){
 			return false;

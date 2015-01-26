@@ -30,25 +30,30 @@ public class Screen extends JPanel implements Runnable { // All drawing is done 
     public static Image map; // The image for the background map
     
     public static boolean isFirst = true; // Flag for first time running
-    public static boolean isDebug = true;
+    public static boolean isFirstAfterLoss = true;
     
     public static Point ms = new Point(0, 0); // Point to keep track of mouse position
     
     public static int myWidth, myHeight; // Width and Height of the JPanel
     public static int money = 200; // Starting money	
-    public static int health = 20; // Starting Health
-    public static int killed = 0, killsToWin = 0, level = 1;
+    public static int health = 1; // Starting Health
+    public static int killed = 0, killsToWin = 0;
+    public static int highScore = -1;
     
+    // Instances of several classes
     public static Manager manager;
     public static Save save;
     public static Store store;
     public static Menu menu;
+    public static PostGame postgame;
     
-    private enum STATE {
-    	MENU, GAME
+    public static String name; // The name of the person who holds the high score
+     
+    public static enum STATE { // Enumerator to keep track of game state
+    	MENU, GAME, POSTGAME
     };
     
-    private STATE state = STATE.MENU;
+    public static STATE state = STATE.MENU; // Initialize the game state
     
     public static Enemy[] enemies = new Enemy[100]; // Holds all the enemies
     
@@ -58,19 +63,23 @@ public class Screen extends JPanel implements Runnable { // All drawing is done 
         gameLoop.start(); // Starts the thread
     }
     
+    /**
+     * Gets ran once in the paint method
+     */
     public void Define() {
         manager = new Manager(); // Initialize other classes
         save = new Save();
         store = new Store();
         menu = new Menu();
+        postgame = new PostGame();
 
         map = new ImageIcon("res/map.png").getImage(); // Load background image
         	
         
-        
+        // Load the track image
         track = new ImageIcon("res/TrackCorner.png").getImage(); // Initialize the track image file
-        track = createImage(new FilteredImageSource(track.getSource(), new CropImageFilter(0, 31*0, 31, 31)));
         
+        // Load images for the towers
         tileset_towers[0] = new ImageIcon("res/redlasertower.png").getImage();
         tileset_towers[1] = new ImageIcon("res/blueLaserTower.png").getImage();
         tileset_towers[2] = new ImageIcon("res/goldLaserTower.png").getImage();
@@ -101,6 +110,7 @@ public class Screen extends JPanel implements Runnable { // All drawing is done 
         
         // Save the configuration of the track
         save.loadSave(new File("save/mission.txt"));
+        save.loadHighScore();
         
         // Initialize enemy objects
         for(int i = 0; i < enemies.length; i++) {
@@ -109,7 +119,11 @@ public class Screen extends JPanel implements Runnable { // All drawing is done 
         
     }
     
+    
     @Override
+    /**
+     * The paint Component function - Paints all the images to the screen
+     */
     public void paintComponent(Graphics g) {
         if(isFirst) { // If its the first time painting
             myWidth = getWidth(); // Set width
@@ -118,9 +132,8 @@ public class Screen extends JPanel implements Runnable { // All drawing is done 
             isFirst = false;            
         }
         
-        
-	    if(state == STATE.GAME){    
-	    	g.clearRect(0, 0, getWidth(), getHeight());
+        g.clearRect(0, 0, getWidth(), getHeight());
+	    if(state == STATE.GAME){    	    	
 	    	manager.draw(g); // Draws the map
 		        for(int i = 0; i < enemies.length; i++) {
 		        	if(enemies[i].isAlive) {
@@ -129,28 +142,30 @@ public class Screen extends JPanel implements Runnable { // All drawing is done 
 		        }	    
 		     store.draw(g); // Draws the store
 	    }
-	    else if(state == STATE.MENU){
+	    
+	    else if(state == STATE.MENU){	    	
 	    	menu.draw(g);
 	    }
-        
-        if(health < 1) { // Displays "Game Over" if health < 1
-        	g.setColor(Color.red);
-        	g.setFont(new Font("Helvetica", Font.BOLD, 40));
-        	g.drawString("Game Over", myWidth/2, myHeight/2);
-        }
+	    
+	    else if(state == STATE.POSTGAME){
+	    	postgame.draw(g);
+	    	
+	    }
     }
     
     public int createTime = 2800, createFrame = 0; // The rate to create enemies
     public static int killCount = 0;
     
+    /**
+     * Create enemies based off a counter
+     */
     public void enemyCreator() { // Creates enemies
     	if(createFrame >= createTime) {
     		for(int i = 0; i < enemies.length; i++) {
     			if(!enemies[i].isAlive) { // If the enemy is no longer alive
     				enemies[i].Create(0); // Create a new one
     				break;
-    			}
-    				
+    			}    				
     		}
     		createFrame = 0;
     	}
@@ -169,8 +184,21 @@ public class Screen extends JPanel implements Runnable { // All drawing is done 
     	}
     }
     
+    /**
+     * Checks to see if there is a new high score
+     */
+    public void CheckScore(){
+    	if(killed > highScore) {
+    		name = JOptionPane.showInputDialog("You set a HighScore!\n What is your Name?");
+    		highScore = killed;
+    	}
+    }
     
-    // The moving of the enemies along with the repainting is done within the thread's run function
+    
+    
+    /**
+     * Implementation of the run function for this classes thread
+     */
     public void run() { 
         while(true) {
             if(!isFirst && health > 0 && state == STATE.GAME) { // If its not the first time running and the user has health
@@ -186,7 +214,14 @@ public class Screen extends JPanel implements Runnable { // All drawing is done 
             	for(int i = 0; i < enemies.length; i++)
             		enemies[i].deleteEnemy(); // Deletes all enemies on the screen
             	
+            	if(isFirstAfterLoss){
+            		CheckScore();// Checks if there is a high score
+            		isFirstAfterLoss = false;
+             		save.writeHighScore();
+            	}
+            	state = STATE.POSTGAME; // Sets the state to postgame            	
             }
+            	
             
            repaint();// Repaint the screen
                         

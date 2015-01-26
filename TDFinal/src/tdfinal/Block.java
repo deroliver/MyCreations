@@ -13,15 +13,25 @@ import java.awt.*;
 public class Block extends Rectangle {
 	public Rectangle towerRange;
 	
-	public int towerRangeSize = 175;
-    public int trackID;
-    public int fieldID;
-    public int shotEnemy = -1;
-    public int healthFrame = 0;
+	public int towerRangeSize = 190;// The range of the towers
+    public int trackID; // The ID for the track
+    public int fieldID; // The ID for the field
+    public int shotEnemy = -1; // The ID of the enemy the tower is shooting at
+    
+    public int healthFrame = 0; // Keeps track of negating health from the enemy
     public static int healthTime = 230;
     
-    public boolean isShooting = false;
+    public boolean isShooting = false; // Is the tower shooting?
     
+    /**
+     * Constructor for the Block object
+     * @param x The x position
+     * @param y The y position
+     * @param width The width
+     * @param height The height
+     * @param trackID The ID for the track
+     * @param fieldID The ID for the field
+     */
     public Block(int x, int y, int width, int height, int trackID, int fieldID) {
         setBounds(x, y, width, height);
         towerRange = new Rectangle(this.x - (towerRangeSize/2), this.y - (towerRangeSize/2), width + (towerRangeSize), height + (towerRangeSize));
@@ -29,6 +39,10 @@ public class Block extends Rectangle {
         this.fieldID = fieldID;
     }
     
+    /**
+     * The drawing function for the Block object
+     * @param g The Graphics object to draw to
+     */
     public void draw(Graphics g) {
         if(trackID == Values.groundTrack) // If the trackID is equal to the values for a track piece
     		g.drawImage(Screen.track, x, y, width, height, null);
@@ -36,9 +50,10 @@ public class Block extends Rectangle {
         g.drawImage(Screen.tileset_towers[fieldID], x, y, width, height, null);                         
     }
     
+    /**
+     * The function which calculates whether the tower is shooting, and which enemy it is shootng at
+     */
     public void physic(){
-    	
-
     	if(shotEnemy != -1 && towerRange.intersects(Screen.enemies[shotEnemy])){
 			isShooting = true;
 		}
@@ -80,25 +95,31 @@ public class Block extends Rectangle {
     	}
     }
     
+    /**
+     * Adds money to the total money
+     * @param enemyID The type of enemy - Could add different types of enemies which reward more money
+     */
     public void getMoney(int enemyID){
-    	Screen.money += Values.deathReward[enemyID];
-    	
+    	Screen.money += Values.deathReward[enemyID];	
     }
-     
+    
+    /**
+     * The function to draw the line from the tower to the enemy
+     * @param g The Graphics object to draw to
+     */
     public void Attack(Graphics g){
     	Graphics2D g2D = (Graphics2D)g;
-    	if(Screen.isDebug){
-	    	if(isShooting){
-	    		g2D.setStroke(new BasicStroke(3));
-	    		if(fieldID == Values.redLaserTower)
-	   	    		g2D.setColor(Color.red);
-	    		else if(fieldID == Values.blueLaserTower)
-	    			g2D.setColor(Color.blue);
-	    		else if(fieldID == Values.goldLaserTower)
-	    			g2D.setColor(Color.yellow);
-	    		g2D.drawLine(x + (width/2), y + (height/2), Screen.enemies[shotEnemy].x + ((Screen.enemies[shotEnemy].width)/2) , Screen.enemies[shotEnemy].y + ((Screen.enemies[shotEnemy].height/2)));
-	    	}
-    	}    	
-    }
+	    if(isShooting){
+	    	g2D.setStroke(new BasicStroke(3));
+	    	if(fieldID == Values.redLaserTower)
+	   	    	g2D.setColor(Color.red);
+	    	else if(fieldID == Values.blueLaserTower)
+	    		g2D.setColor(Color.blue);
+	    	else if(fieldID == Values.goldLaserTower)
+	    		g2D.setColor(Color.yellow);
+	    	g2D.drawLine(x + (width/2), y + (height/2), Screen.enemies[shotEnemy].x + ((Screen.enemies[shotEnemy].width)/2) , Screen.enemies[shotEnemy].y + ((Screen.enemies[shotEnemy].height/2)));
+	    }
+    }    	
 }
+
 

@@ -9,13 +9,16 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- *
+ * The JFrame class
  * @author Derik
  */
 public class Frame extends JFrame {
     public static String title = "Alien Defense";
     public static Dimension size = new Dimension(1345, 850);
     
+    /**
+     * Constructor - Initializes several JFrame attributes
+     */
     public Frame() {
         setTitle(title); // Set title to title string
         setSize(size); // Set size to Dimension object created
@@ -26,6 +29,9 @@ public class Frame extends JFrame {
         init();
     }
     
+    /**
+     * Is ran when the JFrame is created
+     */
     public void init() {
         setLayout(new GridLayout(1, 1, 0, 0)); // Adds objects onto the whole area of the frame
         Screen screen = new Screen(this); // Create a new screen which extends JPanel
@@ -34,6 +40,10 @@ public class Frame extends JFrame {
         
     }
     
+    /**
+     * The main function
+     * @param args
+     */
     public static void main(String[] args) {
         Frame frame = new Frame();
     }

@@ -7,20 +7,22 @@ package tdfinal;
 
 import java.awt.event.*;
 import java.awt.*;
+
+import tdfinal.Screen.STATE;
 /**
- *
+ * Class used to handle mouse movement and clicks
  * @author Derik
  */
 public class KeyHandler implements MouseMotionListener, MouseListener {
 
-  
-    public void mouseDragged(MouseEvent e) {
-        Screen.ms = new Point((e.getX()) - ((Frame.size.width - Screen.myWidth)/2), (e.getY()) - ((Frame.size.height - Screen.myHeight)) - ((Frame.size.width - Screen.myWidth)/2));     
-    }
+	
+    public void mouseDragged(MouseEvent e) {     
+    	Screen.ms = new Point(e.getX(), e.getY() - 25);   
+    	}
 
     
-    public void mouseMoved(MouseEvent e) {
-        Screen.ms = new Point((e.getX()) - ((Frame.size.width - Screen.myWidth)/2), (e.getY()) - ((Frame.size.height - (Screen.myHeight)) - (Frame.size.width - Screen.myWidth)/2));             
+    public void mouseMoved(MouseEvent e) {             
+    	Screen.ms = new Point(e.getX(), e.getY() - 25);   
     }
 
     
@@ -30,8 +32,13 @@ public class KeyHandler implements MouseMotionListener, MouseListener {
 
     
     public void mousePressed(MouseEvent e) {
-        Screen.store.Click(e.getButton());
-    }
+    	if(Screen.state == STATE.MENU)
+    		Menu.Click(e.getButton());
+    	else if(Screen.state == STATE.GAME)
+        	Screen.store.Click(e.getButton());
+    	else if(Screen.state == STATE.POSTGAME)
+    		PostGame.Click(e.getButton());    
+    	}
 
     
     public void mouseReleased(MouseEvent e) {

@@ -9,23 +9,27 @@ import java.awt.*;
 
 import javax.swing.ImageIcon;
 /**
- *
+ * The class to mange the store
  * @author Derik
  */
 public class Store {
-    public static int shopWidth = 8;
-    public static int buttonSize = 31;
-    public static int Space = 5;
-    public static int icon = 45;
-    public static int heldID = 0;
+    public static int shopWidth = 8; // Number of buttons
+    public static int buttonSize = 31; // Size of the button
+    public static int Space = 5; // Space between the buttons
+    public static int icon = 45; // Size of the heart and money icon
+    public static int heldID = 0; // The ID of the held item
     
+    // ID of the buttons
     public static int[] buttonID = {Values.redLaserTower, Values.blueLaserTower, Values.goldLaserTower, 7, 7, 7, 7, Values.trash};
+    // Price of the buttons
     public static int[] buttonPrice = {100, 200, 300, 0, 0, 0, 0, 0};
     
+    // Rectangles to represent the buttons and icons
     public Rectangle[] button = new Rectangle[shopWidth];
     public Rectangle buttonHealth;
     public Rectangle money; 
     
+    // The background images
     public Image map;
     
     public boolean holdItem = false;
@@ -35,7 +39,10 @@ public class Store {
         define();
     }
  
-    
+    /**
+     * Handles the button clicks for the store
+     * @param mButton
+     */
     public void Click(int mButton) {
     	if(mButton == 1){ // Right click mouse button
     		for(int i = 0; i < button.length; i++){
@@ -60,8 +67,7 @@ public class Store {
     							if(Screen.manager.world[i][j].trackID != Values.groundTrack && Screen.manager.world[i][j].fieldID == Values.groundField){
     								Screen.manager.world[i][j].fieldID = heldID;
     								Screen.money -= buttonPrice[heldID];
-    						}
-    							
+    						}    							
     					}    					
     					}
     				}
@@ -72,7 +78,9 @@ public class Store {
     
     
   
-    
+    /**
+     * Initializes the objects in the store
+     */
     public void define() {
         map = new ImageIcon("res/shop.png").getImage(); // Load the image for the shop background
         for(int i = 0; i < button.length; i++) { // Create the buttons
@@ -83,6 +91,10 @@ public class Store {
         money = new Rectangle(200, 707, icon, icon); // Create the rectangle for the money indicator
     }
     
+    /**
+     * Draws the store to the screen
+     * @param g The Graphics object to draw to
+     */
     public void draw(Graphics g) { // Draw function
         g.drawImage(map, 28, 699, null); // Draw the shop backgrond
         g.setFont(new Font("Helvetica", Font.CENTER_BASELINE, 12)); // Font setter
@@ -101,7 +113,7 @@ public class Store {
             }          
         }
         
-        g.drawString("Killed: " + Screen.killed,140 ,713);
+        g.drawString("Killed: " + Screen.killed,140 ,715); // Kill counter
         g.drawImage(Screen.tileset_indicators[2], buttonHealth.x, buttonHealth.y, buttonHealth.width, buttonHealth.height, null); // Draws the hear
         g.drawImage(Screen.tileset_indicators[1], money.x, money.y, money.width, money.height, null); // Draws the coin
         g.setFont(new Font("Helvetica", Font.BOLD, 18)); // Font setter

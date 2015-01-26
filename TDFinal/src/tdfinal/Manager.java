@@ -38,6 +38,9 @@ public class Manager {
         }
     }
     
+    /**
+     * Calls the physic function for each block
+     */
     public void physic() {
         for(int i = 0; i < world.length; i++) {
         	for(int j = 0; j < world[0].length; j++){
